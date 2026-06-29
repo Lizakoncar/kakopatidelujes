@@ -73,6 +73,8 @@
   .o-sun::before   { background: var(--sun); }
   .o-lav::before   { background: var(--lav); }
   .glow { position: absolute; z-index: 0; border-radius: 50%; filter: blur(18px); pointer-events: none; }
+  /* vsaka sekcija je svoja plast, da zamegljeni krogi ostanejo v ozadju in ne prelijejo nad sosednjo sekcijo */
+  .hero, .intro, .takeaways, .programs, .about, .contact { isolation: isolate; }
   @keyframes float { 0%,100% { transform: translateY(0) rotate(var(--rot,0deg)); } 50% { transform: translateY(-14px) rotate(var(--rot,0deg)); } }
   .float { animation: float 8s ease-in-out infinite; }
   .float.slow { animation-duration: 11s; }
@@ -197,10 +199,30 @@
   .craft p { margin: 0; color: var(--plum-soft); font-size: 1.02rem; max-width: 40ch; position: relative; z-index: 3; }
   .craft:nth-child(even) p { margin-left: auto; }
   @media (max-width: 760px) {
-    .craft, .craft:nth-child(even) { width: 100%; flex-direction: column; text-align: left; align-items: flex-start; gap: 22px; margin-bottom: 44px; }
+    .flow-list {
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 18px;
+      margin-top: 40px;
+      padding-bottom: 18px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .craft, .craft:nth-child(odd), .craft:nth-child(even) {
+      flex: 0 0 80%;
+      width: 80%;
+      max-width: 300px;
+      flex-direction: column;
+      align-items: flex-start;
+      align-self: flex-start;
+      text-align: left;
+      gap: 18px;
+      margin-bottom: 0;
+      scroll-snap-align: start;
+    }
     .craft:nth-child(even) p { margin-left: 0; }
-    .craft .media { width: 72%; }
-    .craft .big-idx { top: -30px; left: 0 !important; right: auto !important; }
+    .craft .media { width: 100%; }
+    .craft .big-idx { top: -26px; left: 0 !important; right: auto !important; }
   }
   /* events */
   .events { position: relative; z-index: 2; margin-top: 90px; max-width: 760px; }
