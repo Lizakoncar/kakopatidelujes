@@ -112,13 +112,19 @@
   .hm-1 { top: 9%; right: 52%; }
   .hm-2 { bottom: 4%; right: 10%; }
   @media (max-width: 880px) {
-    .hero { grid-template-columns: 1fr; height: auto; min-height: 100svh; }
-    .hero-text { padding: 120px 28px 24px; }
-    .hero-cluster { height: 54svh; min-height: 340px; }
-    .sc-a { height: 88%; right: 6%; } .sc-b { height: 52%; right: 48%; }
-  }
-  @media (max-width: 460px) {
-    .sc-a { height: 90%; right: 3%; } .sc-b { height: 56%; right: 50%; bottom: 4%; }
+    .hero { display: block; height: auto; min-height: 100svh; }
+    .hero-text { padding: 116px 28px 20px; }
+    .hero-cluster { position: relative; height: auto; min-height: 0; padding: 0 28px 52px; }
+    /* na mobilnem skrij sliko kamna in lebdeče oznake; pokaži le čisto skupinsko sliko */
+    .hero-cluster .sc-b, .hero .hm-1, .hero .hm-2 { display: none; }
+    .sc-a {
+      position: relative;
+      width: 100%; height: auto;
+      aspect-ratio: 4/3;
+      top: auto; right: auto;
+      transform: none;
+      animation: none;
+    }
   }
   /* ---------- buttons ---------- */
   .btn {
@@ -358,7 +364,7 @@
   <div class="scrap float"><img src="images/gal-3.jpg" alt="Utrinek z delavnice" /></div>
   <div class="wrap">
     <p class="marker">Kaj odneseš s sabo</p>
-    <h2>Več kot delavnica. Nežna, a globoka izkušnja zate, za prijatelje ali otroke.</h2>
+    <h2>Več kot delavnica. Nežna, a globoka izkušnja. Zate, za prijatelje ali otroke.</h2>
     <div class="tk-flow">
       <div class="tk-item">
         <span class="tk-idx">01</span>
