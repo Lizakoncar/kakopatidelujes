@@ -94,6 +94,7 @@
   @media (max-width: 760px) { nav.links { display: none; } }
   /* ---------- hero (dense collage, fills the fold) ---------- */
   .hero { position: relative; height: 100svh; min-height: 600px; overflow-x: clip; display: grid; grid-template-columns: 1.05fr 1.15fr; }
+  .hero .glow-1 { width: 520px; height: 520px; background: var(--sage); opacity: .6; top: -120px; left: -150px; }
   .hero .glow-2 { width: 460px; height: 460px; background: var(--blush); opacity: .55; bottom: -150px; left: 26%; }
   .hero .glow-3 { width: 420px; height: 420px; background: var(--sky); opacity: .5; top: -80px; right: -120px; }
   .hero .glow-4 { width: 300px; height: 300px; background: var(--sun); opacity: .42; bottom: 4%; right: 30%; }
@@ -196,32 +197,36 @@
   .craft h3 { font-size: 1.7rem; color: var(--plum); }
   .craft p { margin: 0; color: var(--plum-soft); font-size: 1.02rem; max-width: 40ch; position: relative; z-index: 3; }
   .craft:nth-child(even) p { margin-left: auto; }
+  /* kloni za neskončni mobilni karusel — skriti na namizju */
+  .craft.clone { display: none; }
+  @keyframes craftscroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @media (max-width: 760px) {
     .flow-list {
       flex-direction: row;
-      overflow-x: auto;
-      gap: 18px;
+      flex-wrap: nowrap;
+      width: max-content;
+      gap: 0;
       margin-top: 40px;
-      padding-bottom: 18px;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
+      animation: craftscroll 50s linear infinite;
     }
+    .flow-list:active { animation-play-state: paused; }
+    .craft.clone { display: flex; }
     .craft, .craft:nth-child(odd), .craft:nth-child(even) {
-      flex: 0 0 80%;
-      width: 80%;
-      max-width: 300px;
+      flex: 0 0 82vw;
+      width: 82vw;
+      max-width: 340px;
+      margin: 0 18px 0 0;
       flex-direction: column;
       align-items: flex-start;
       align-self: flex-start;
       text-align: left;
       gap: 18px;
-      margin-bottom: 0;
-      scroll-snap-align: start;
     }
     .craft:nth-child(even) p { margin-left: 0; }
     .craft .media { width: 100%; }
     .craft .big-idx { top: -26px; left: 0 !important; right: auto !important; }
   }
+  @media (prefers-reduced-motion: reduce) { .flow-list { animation: none; } }
   /* events */
   .events { position: relative; z-index: 2; margin-top: 90px; max-width: 760px; }
   .events h3 { font-family: var(--display); font-weight: 500; font-size: 1.7rem; color: var(--plum); margin: 0 0 22px; }
@@ -549,6 +554,19 @@
 </footer>
 <script>
   document.getElementById('leto').textContent = new Date().getFullYear();
+
+  // podvoji kartice veščin za brezšiven mobilni karusel (kloni so na namizju skriti)
+  (function () {
+    const list = document.querySelector('.flow-list');
+    if (!list) return;
+    Array.prototype.slice.call(list.children).forEach(function (node) {
+      const c = node.cloneNode(true);
+      c.classList.add('clone', 'in');
+      c.setAttribute('aria-hidden', 'true');
+      list.appendChild(c);
+    });
+  })();
+
   const els = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
