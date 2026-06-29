@@ -199,17 +199,17 @@
   .craft:nth-child(even) p { margin-left: auto; }
   /* kloni za neskončni mobilni karusel — skriti na namizju */
   .craft.clone { display: none; }
-  @keyframes craftscroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @media (max-width: 760px) {
     .flow-list {
       flex-direction: row;
       flex-wrap: nowrap;
-      width: max-content;
       gap: 0;
       margin-top: 40px;
-      animation: craftscroll 50s linear infinite;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
     }
-    .flow-list:active { animation-play-state: paused; }
+    .flow-list::-webkit-scrollbar { display: none; }
     .craft.clone { display: flex; }
     .craft, .craft:nth-child(odd), .craft:nth-child(even) {
       flex: 0 0 82vw;
@@ -226,7 +226,6 @@
     .craft .media { width: 100%; }
     .craft .big-idx { top: -26px; left: 0 !important; right: auto !important; }
   }
-  @media (prefers-reduced-motion: reduce) { .flow-list { animation: none; } }
   /* events */
   .events { position: relative; z-index: 2; margin-top: 90px; max-width: 760px; }
   .events h3 { font-family: var(--display); font-weight: 500; font-size: 1.7rem; color: var(--plum); margin: 0 0 22px; }
@@ -565,6 +564,48 @@
       c.setAttribute('aria-hidden', 'true');
       list.appendChild(c);
     });
+  })();
+
+  // mobilni karusel veščin: počasno samodejno vrtenje + ročno drsenje;
+  // ko obiskovalec drsa, se ustavi, in se po 5 s mirovanja spet počasi nadaljuje
+  (function () {
+    const list = document.querySelector('.flow-list');
+    if (!list) return;
+    const mq = window.matchMedia('(max-width: 760px)');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const SPEED = 0.3;            // px na sličico — nežno počasi
+    const IDLE = 5000;           // 5 s mirovanja, nato se nadaljuje
+    let half = 0, paused = false, idleTimer = null, lastSelf = 0;
+
+    function measure() { half = mq.matches ? list.scrollWidth / 2 : 0; }
+    measure();
+    window.addEventListener('resize', measure);
+    window.addEventListener('load', measure);
+
+    function pause() {
+      paused = true;
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(function () { paused = false; }, IDLE);
+    }
+    // dotik / miška / kolešček = obiskovalec prevzame nadzor
+    ['pointerdown', 'touchstart', 'wheel'].forEach(function (ev) {
+      list.addEventListener(ev, pause, { passive: true });
+    });
+    // drsenje, ki ga ni povzročil naš avtomatski korak, prav tako šteje kot ročno
+    list.addEventListener('scroll', function () {
+      if (performance.now() - lastSelf > 120) pause();
+    }, { passive: true });
+
+    function step() {
+      if (!reduce && !paused && mq.matches && half) {
+        let x = list.scrollLeft + SPEED;
+        if (x >= half) x -= half;            // brezšiven preskok nazaj (vsebina je podvojena)
+        lastSelf = performance.now();
+        list.scrollLeft = x;
+      }
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
   })();
 
   const els = document.querySelectorAll('.reveal');
