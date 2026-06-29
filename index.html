@@ -146,6 +146,7 @@
   .intro .lead em { font-style: italic; color: var(--lav-deep); }
   .intro .body { margin-top: 24px; font-size: 1.05rem; color: var(--plum-soft); max-width: 46ch; }
   .intro .body strong { color: var(--plum); font-weight: 700; }
+  .intro .body em { font-style: italic; color: var(--lav-deep); }
   .signoff { font-family: var(--display); font-style: italic; font-weight: 500; color: var(--lav-deep); margin-top: 22px; font-size: 1.55rem; }
   .intro-media .orb .shape img { aspect-ratio: 4/5; }
   .intro-media .scrap { position: absolute; width: 42%; aspect-ratio: 1/1; right: -6%; bottom: -8%; transform: rotate(6deg); z-index: 3; }
@@ -223,6 +224,7 @@
       gap: 18px;
     }
     .craft:nth-child(even) p { margin-left: 0; }
+    .craft p { max-width: none; }
     .craft .media { width: 100%; }
     .craft .big-idx { top: -26px; left: 0 !important; right: auto !important; }
   }
@@ -245,6 +247,7 @@
   .about .marker { color: var(--sun); }
   .about h2 { font-size: clamp(2rem, 4.4vw, 2.9rem); color: var(--paper); margin-bottom: 22px; }
   .about p { color: rgba(247,244,239,.82); margin: 0 0 16px; }
+  .about em { font-style: italic; color: var(--sun); }
   .about .pull { font-family: var(--display); font-style: italic; font-size: 1.55rem; color: var(--sun); margin: 0 0 8px; }
   .about .name { font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,239,.7); margin-top: 14px; display: inline-block; }
   /* ---------- contact ---------- */
@@ -320,13 +323,13 @@
   <div class="wrap">
     <div class="intro-text">
       <p class="marker">Povabilo</p>
-      <p class="lead">Zagotovo nisem edina, ki se ji zdi svet <em>prehiter</em>  in ne edina, ki se sama sebi zdi <em>prepočasna</em>.</p>
+      <p class="lead">Zagotovo nisem edina, ki se ji zdi svet <em>prehiter</em> in ne edina, ki se sama sebi zdi <em>prepočasna</em>.</p>
       <div class="body">
         <p>Vabim te, da z mano zadihaš. Da za nekaj ur odložiš telefon, obveznosti in zunanje
         distrakcije. Ponujam ti čas, material, znanje in varen prostor, da skozi preproste
         rokodelske veščine spoznaš svoje odzive na svoje občutke.</p>
         <p>Cilj ni popoln izdelek, ampak pozornost, ki jo namenimo lastnemu delovanju.
-        Da z ljubeznijo opaziš, kako pa <italic>ti</italic> v tem svetu deluješ.</p>
+        Da z ljubeznijo opaziš, kako pa <em>ti</em> v tem svetu deluješ.</p>
         <p class="signoff">Vesela te bom.</p>
       </div>
     </div>
@@ -573,14 +576,14 @@
     if (!list) return;
     const mq = window.matchMedia('(max-width: 760px)');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const SPEED = 0.3;            // px na sličico — nežno počasi
+    const SPEED = 0.5;            // px na sličico — nežno počasi
     const IDLE = 5000;           // 5 s mirovanja, nato se nadaljuje
-    let half = 0, paused = false, idleTimer = null, lastSelf = 0;
+    let half = 0, paused = false, idleTimer = null, lastSelf = 0, pos = 0, engaged = false;
 
     function measure() { half = mq.matches ? list.scrollWidth / 2 : 0; }
     measure();
     window.addEventListener('resize', measure);
-    window.addEventListener('load', measure);
+    window.addEventListener('load', function () { measure(); pos = list.scrollLeft; });
 
     function pause() {
       paused = true;
@@ -589,19 +592,22 @@
     }
     // dotik / miška / kolešček = obiskovalec prevzame nadzor
     ['pointerdown', 'touchstart', 'wheel'].forEach(function (ev) {
-      list.addEventListener(ev, pause, { passive: true });
+      list.addEventListener(ev, function () { engaged = true; pause(); }, { passive: true });
     });
-    // drsenje, ki ga ni povzročil naš avtomatski korak, prav tako šteje kot ročno
+    // ročno drsenje: nadaljuj od trenutne lege; pavza šele po dejanski interakciji
     list.addEventListener('scroll', function () {
-      if (performance.now() - lastSelf > 120) pause();
+      if (performance.now() - lastSelf > 120) {
+        pos = list.scrollLeft;
+        if (engaged) pause();
+      }
     }, { passive: true });
 
     function step() {
       if (!reduce && !paused && mq.matches && half) {
-        let x = list.scrollLeft + SPEED;
-        if (x >= half) x -= half;            // brezšiven preskok nazaj (vsebina je podvojena)
+        pos += SPEED;                          // štejemo v lastni spremenljivki (tudi pod 1px)
+        if (pos >= half) pos -= half;          // brezšiven preskok nazaj (vsebina je podvojena)
         lastSelf = performance.now();
-        list.scrollLeft = x;
+        list.scrollLeft = pos;
       }
       requestAnimationFrame(step);
     }
