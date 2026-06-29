@@ -206,6 +206,9 @@
       flex-wrap: nowrap;
       gap: 0;
       margin-top: 40px;
+      width: 100vw;
+      margin-left: calc(50% - 50vw);   /* poln razteg do robov zaslona */
+      padding: 30px 0 34px;            /* navpični prostor, da slike niso odrezane; vodoravno 0 = do roba */
       overflow-x: auto;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
@@ -213,10 +216,10 @@
     .flow-list::-webkit-scrollbar { display: none; }
     .craft.clone { display: flex; }
     .craft, .craft:nth-child(odd), .craft:nth-child(even) {
-      flex: 0 0 82vw;
-      width: 82vw;
-      max-width: 340px;
-      margin: 0 18px 0 0;
+      flex: 0 0 80vw;
+      width: 80vw;
+      max-width: 360px;
+      margin: 0 16px 0 0;
       flex-direction: column;
       align-items: flex-start;
       align-self: flex-start;
@@ -226,7 +229,8 @@
     .craft:nth-child(even) p { margin-left: 0; }
     .craft p { max-width: none; }
     .craft .media { width: 100%; }
-    .craft .big-idx { top: -26px; left: 0 !important; right: auto !important; }
+    .craft .media .orb::before { inset: -10px; }
+    .craft .big-idx { top: -22px; left: 0 !important; right: auto !important; }
   }
   /* events */
   .events { position: relative; z-index: 2; margin-top: 90px; max-width: 760px; }
