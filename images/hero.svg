@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" preserveAspectRatio="xMidYMid slice">
-  <rect width="900" height="1200" fill="#6b7733"/>
-  <g fill="none" stroke="#f4f0e6" stroke-width="3" opacity="0.55">
-    <circle cx="450" cy="570" r="46"/>
-    <path d="M380 660 q70 -80 140 0" />
-  </g>
-  <text x="50%" y="690" fill="#f4f0e6" opacity="0.85" font-family="Verdana, sans-serif"
-        font-size="22" text-anchor="middle">tukaj pride glavna fotografija</text>
-</svg>
