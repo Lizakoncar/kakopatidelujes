@@ -354,7 +354,7 @@
     <div class="intro-media">
       <div class="orb o-blush s2 float"><div class="shape"><img src="images/DSC09019 Large.jpeg" alt="Delovni list z vprašanjem Kako pa ti deluješ?" /></div></div>
       <div class="scrap float slow"><img src="images/intro-worksheet.jpg" alt="Drobni izdelki z delavnice" /></div>
-      <span class="cap">fig. delavnica + delovni list</span>
+      <span class="cap">fig. delovni list + izdelki</span>
     </div>
   </div>
 </section>
@@ -523,8 +523,10 @@
       </div>
     </div>
     <div class="contact-form reveal">
-      <!-- TODO: zamenjaj YOUR_FORM_ID s Formspree ID (glej README) -->
-      <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <!-- Obrazec pošlje sporočilo na Lizin e-naslov prek Formspree. -->
+      <form action="https://formspree.io/f/mvzjbyej" method="POST">
+        <input type="hidden" name="_subject" value="Novo povpraševanje — Kako pa ti deluješ?" />
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
         <div>
           <label for="ime">Ime</label>
           <input type="text" id="ime" name="ime" required />
