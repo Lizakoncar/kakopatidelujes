@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
-  <rect width="800" height="600" fill="#f1cad5"/>
-  <g fill="none" stroke="#43344a" stroke-width="3" opacity="0.45">
-    <circle cx="400" cy="274" r="42"/>
-    <path d="M334 354 q66 -74 132 0"/>
-  </g>
-  <text x="400" y="372" fill="#43344a" opacity="0.8" font-family="Verdana, sans-serif" font-size="20" text-anchor="middle">kvackanje / strikanje — foto</text>
-</svg>
