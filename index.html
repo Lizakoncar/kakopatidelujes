@@ -745,6 +745,12 @@
     const modal = document.getElementById('signup-modal');
     if (!grid || !modal) return;
     const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    // lepše oblikovanje datuma/ure/cene (Sheets vrne surov ISO zapis)
+    const pad = n => (n < 10 ? '0' : '') + n;
+    const isISO = s => /^\d{4}-\d{2}-\d{2}T/.test(String(s));
+    const fmtDate = v => { if (v == null || v === '') return ''; const s = String(v); if (isISO(s)) { const d = new Date(s); if (!isNaN(d)) return d.getDate() + '. ' + (d.getMonth() + 1) + '. ' + d.getFullYear(); } return s; };
+    const fmtTime = v => { if (v == null || v === '') return ''; const s = String(v); if (isISO(s)) { const d = new Date(s); if (!isNaN(d)) return pad(d.getHours()) + ':' + pad(d.getMinutes()); } return s; };
+    const fmtCena = v => { if (v == null || v === '') return ''; const s = String(v).trim(); return /^\d+([.,]\d+)?$/.test(s) ? s + ' €' : s; };
  
     // JSONP klic (brez CORS težav)
     function jsonp(params, cb) {
@@ -765,16 +771,17 @@
       grid.innerHTML = list.map(w => {
         const mesta = (w.mesta === '' || w.mesta == null) ? '' : Number(w.mesta);
         const full = mesta !== '' && mesta <= 0;
-        const dana = esc(w.naslov) + (w.datum ? ' — ' + esc(w.datum) : '');
+        const datum = fmtDate(w.datum);
+        const dana = esc(w.naslov) + (datum ? ' — ' + esc(datum) : '');
         const btn = full
           ? '<span class="term-full">Zasedeno</span>'
           : '<button class="btn btn-primary" data-delavnica="' + dana + '">Prijavi se</button>';
         return '<article class="term-card">'
-          + '<div class="term-date">' + esc(w.datum) + (w.ura ? ' · ' + esc(w.ura) : '') + '</div>'
+          + '<div class="term-date">' + esc(datum) + (w.ura ? ' · ' + esc(fmtTime(w.ura)) : '') + '</div>'
           + '<h3>' + esc(w.naslov) + '</h3>'
           + '<p class="term-meta">' + [w.vescina, w.kraj].filter(Boolean).map(esc).join(' · ') + '</p>'
           + (w.opis ? '<p class="term-desc">' + esc(w.opis) + '</p>' : '')
-          + '<p class="term-foot"><span>' + esc(w.cena || '') + '</span>' + (mesta !== '' ? '<span>Prosta mesta: ' + mesta + '</span>' : '') + '</p>'
+          + '<p class="term-foot"><span>' + esc(fmtCena(w.cena)) + '</span>' + (mesta !== '' ? '<span>Prosta mesta: ' + mesta + '</span>' : '') + '</p>'
           + btn + '</article>';
       }).join('');
     });
