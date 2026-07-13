@@ -292,6 +292,30 @@
   .form-thanks { padding: 6px 0; }
   .form-thanks h3 { font-family: var(--display); font-weight: 500; font-size: 1.7rem; color: var(--plum); margin-bottom: 10px; }
   .form-thanks p { color: var(--plum-soft); margin: 0; }
+  /* ---------- prihajajoče delavnice (termini) ---------- */
+  .termini { position: relative; padding: 96px 0; overflow-x: clip; }
+  .termini .glow-1 { width: 420px; height: 420px; background: var(--sun); opacity: .24; top: -60px; right: 6%; }
+  .termini .glow-2 { width: 360px; height: 360px; background: var(--sky); opacity: .3; bottom: -60px; left: 4%; }
+  .termini .wrap { position: relative; z-index: 1; }
+  .termini h2 { font-size: clamp(2rem, 4.4vw, 3rem); color: var(--plum); }
+  .term-intro { max-width: 520px; color: var(--plum-soft); margin-top: 16px; }
+  .term-grid { margin-top: 48px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 22px; }
+  .term-empty { grid-column: 1/-1; color: var(--plum-soft); font-family: var(--mono); font-size: .85rem; }
+  .term-card { background: #fff; border-radius: 22px; padding: 22px 22px 24px; box-shadow: 0 18px 40px -30px rgba(122,22,14,.45); display: flex; flex-direction: column; gap: 9px; }
+  .term-date { font-family: var(--mono); font-weight: 700; font-size: .78rem; letter-spacing: .05em; text-transform: uppercase; color: var(--lav-deep); }
+  .term-card h3 { font-size: 1.4rem; color: var(--plum); }
+  .term-meta { font-family: var(--mono); font-size: .72rem; color: var(--plum-soft); margin: 0; }
+  .term-desc { color: var(--plum-soft); font-size: .98rem; margin: 0; }
+  .term-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: var(--mono); font-size: .75rem; color: var(--plum); margin-top: 2px; }
+  .term-card .btn { margin-top: 8px; align-self: flex-start; }
+  .term-full { font-family: var(--mono); font-size: .75rem; color: var(--plum-soft); }
+  /* prijavno okno (modal) */
+  .modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(58,10,6,.55); }
+  .modal[hidden] { display: none; }
+  .modal-card { background: var(--paper); border-radius: 24px; max-width: 440px; width: 100%; padding: 30px 28px; position: relative; box-shadow: 0 40px 80px -30px rgba(0,0,0,.5); max-height: 90vh; overflow: auto; }
+  .modal-card h3 { font-size: 1.5rem; color: var(--plum); margin-bottom: 4px; }
+  .modal-sub { font-family: var(--mono); font-size: .74rem; color: var(--lav-deep); margin-bottom: 18px; }
+  .modal-x { position: absolute; top: 12px; right: 16px; background: none; border: 0; font-size: 1.7rem; line-height: 1; color: var(--plum-soft); cursor: pointer; }
   /* ---------- footer ---------- */
   footer { background: var(--plum); color: var(--paper); padding: 78px 0 44px; text-align: center; }
   footer .big { font-family: var(--display); font-weight: 400; font-style: italic; font-size: clamp(2.2rem, 7vw, 4rem); color: var(--paper); line-height: 1; }
@@ -319,6 +343,7 @@
   <nav class="links">
     <a href="#delavnice">Delavnice</a>
     <a href="#programi">Veščine</a>
+    <a href="#termini">Termini</a>
     <a href="#liza">O Lizi</a>
     <a href="#kontakt">Kontakt</a>
   </nav>
@@ -480,6 +505,19 @@
     </div>
   </div>
 </section>
+<!-- ============ PRIHAJAJOČE DELAVNICE ============ -->
+<section class="termini reveal" id="termini">
+  <span class="glow glow-1"></span>
+  <span class="glow glow-2"></span>
+  <div class="wrap">
+    <p class="marker">Termini</p>
+    <h2>Prihajajoče delavnice</h2>
+    <p class="term-intro">Izberi termin, ki ti ustreza, in se prijavi. Če ni razpisanega termina zate, mi
+    piši — z veseljem se dogovoriva za svojega.</p>
+    <div class="term-grid" id="term-grid"><p class="term-empty">Nalagam termine…</p></div>
+  </div>
+</section>
+ 
 <!-- ============ ABOUT ============ -->
 <section class="about" id="liza">
   <span class="glow glow-1"></span>
@@ -571,6 +609,36 @@
     </div>
   </div>
 </section>
+<!-- ============ PRIJAVNO OKNO ============ -->
+<div class="modal" id="signup-modal" hidden>
+  <div class="modal-card">
+    <button class="modal-x" type="button" aria-label="Zapri">×</button>
+    <h3>Prijava na delavnico</h3>
+    <p class="modal-sub" id="signup-which"></p>
+    <form id="signup-form">
+      <input type="hidden" name="delavnica" />
+      <div>
+        <label for="s-ime">Ime</label>
+        <input id="s-ime" name="ime" required />
+      </div>
+      <div>
+        <label for="s-email">E-pošta</label>
+        <input id="s-email" name="email" type="email" required />
+      </div>
+      <div>
+        <label for="s-osebe">Število oseb</label>
+        <input id="s-osebe" name="osebe" type="number" min="1" value="1" />
+      </div>
+      <div>
+        <label for="s-sporocilo">Sporočilo (neobvezno)</label>
+        <textarea id="s-sporocilo" name="sporocilo"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Pošlji prijavo</button>
+      <p class="form-note" id="signup-note"></p>
+    </form>
+  </div>
+</div>
+ 
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="wrap">
@@ -668,6 +736,80 @@
       }
     });
   })();
+  // Prihajajoče delavnice: beri iz Google Preglednice (prek Apps Script) + prijave
+  (function () {
+    // ▼▼▼ PO NAMESTITVI SEM PRILEPI SPLETNI NASLOV APPS SCRIPTA (glej DELAVNICE-navodila.md) ▼▼▼
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbypCXMSLV9ak_lhKIpIN5QvVzhHcooppyIoRc4qrbO6WTXwDeiiafwvL5CO2LSAt7X7/exec';
+    // ▲▲▲
+    const grid = document.getElementById('term-grid');
+    const modal = document.getElementById('signup-modal');
+    if (!grid || !modal) return;
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+ 
+    if (!SCRIPT_URL || SCRIPT_URL.indexOf('PASTE_') === 0) {
+      grid.innerHTML = '<p class="term-empty">Termini bodo kmalu na voljo.</p>';
+    } else {
+      fetch(SCRIPT_URL).then(r => r.json()).then(list => {
+        if (!Array.isArray(list) || !list.length) {
+          grid.innerHTML = '<p class="term-empty">Trenutno ni razpisanih terminov — piši mi za dogovor.</p>';
+          return;
+        }
+        grid.innerHTML = list.map(w => {
+          const mesta = (w.mesta === '' || w.mesta == null) ? '' : Number(w.mesta);
+          const full = mesta !== '' && mesta <= 0;
+          const dana = esc(w.naslov) + (w.datum ? ' — ' + esc(w.datum) : '');
+          const btn = full
+            ? '<span class="term-full">Zasedeno</span>'
+            : '<button class="btn btn-primary" data-delavnica="' + dana + '">Prijavi se</button>';
+          return '<article class="term-card">'
+            + '<div class="term-date">' + esc(w.datum) + (w.ura ? ' · ' + esc(w.ura) : '') + '</div>'
+            + '<h3>' + esc(w.naslov) + '</h3>'
+            + '<p class="term-meta">' + [w.vescina, w.kraj].filter(Boolean).map(esc).join(' · ') + '</p>'
+            + (w.opis ? '<p class="term-desc">' + esc(w.opis) + '</p>' : '')
+            + '<p class="term-foot"><span>' + esc(w.cena || '') + '</span>' + (mesta !== '' ? '<span>Prosta mesta: ' + mesta + '</span>' : '') + '</p>'
+            + btn + '</article>';
+        }).join('');
+      }).catch(() => { grid.innerHTML = '<p class="term-empty">Terminov trenutno ni mogoče naložiti.</p>'; });
+    }
+ 
+    // odpri prijavno okno
+    grid.addEventListener('click', e => {
+      const b = e.target.closest('button[data-delavnica]');
+      if (!b) return;
+      modal.querySelector('input[name=delavnica]').value = b.dataset.delavnica;
+      document.getElementById('signup-which').textContent = b.dataset.delavnica;
+      document.getElementById('signup-note').textContent = '';
+      modal.hidden = false;
+    });
+    const close = () => { modal.hidden = true; };
+    modal.addEventListener('click', e => { if (e.target === modal || e.target.closest('.modal-x')) close(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
+ 
+    // oddaja prijave (v Google Preglednico prek Apps Script)
+    const form = document.getElementById('signup-form');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const note = document.getElementById('signup-note');
+      const btn = form.querySelector('button[type=submit]');
+      const lbl = btn.textContent;
+      const ime = form.ime.value;
+      btn.disabled = true; btn.textContent = 'Pošiljam…';
+      const p = new URLSearchParams({
+        action: 'signup',
+        delavnica: form.delavnica.value, ime: ime, email: form.email.value,
+        osebe: form.osebe.value, sporocilo: form.sporocilo.value
+      });
+      try {
+        await fetch(SCRIPT_URL + '?' + p.toString());
+        form.innerHTML = '<div class="form-thanks"><h3>Prijava oddana!</h3>'
+          + '<p>Hvala, ' + esc(ime) + '. Oglasim se s potrditvijo. ❤</p></div>';
+      } catch (err) {
+        btn.disabled = false; btn.textContent = lbl;
+        note.textContent = 'Ups, poskusi znova ali piši na kakopatidelujes@gmail.com.';
+      }
+    });
+  })();
+ 
   const els = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
