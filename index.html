@@ -527,7 +527,7 @@
     </div>
     <div class="about-text reveal">
       <p class="marker">Zgodba</p>
-      <h2>Nikoli nisem bila človek, ki bi se brez težav znašel v sistemih.</h2>
+      <h2>Nikoli nisem bila človek, ki bi se brez težav znašla v sistemih.</h2>
       <p>Že kot otrok sem svet doživljala nekoliko drugače. Zaradi težke oblike disleksije mi šolski
       sistem ni bil pisan na kožo, razen predmeti v rokah, materialih, glasbi, barvah in idejah.
       Tam sem bila doma.</p>
@@ -739,38 +739,45 @@
   // Prihajajoče delavnice: beri iz Google Preglednice (prek Apps Script) + prijave
   (function () {
     // ▼▼▼ PO NAMESTITVI SEM PRILEPI SPLETNI NASLOV APPS SCRIPTA (glej DELAVNICE-navodila.md) ▼▼▼
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbypCXMSLV9ak_lhKIpIN5QvVzhHcooppyIoRc4qrbO6WTXwDeiiafwvL5CO2LSAt7X7/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzR3P8MlInWetoeuXFtUGDVhFFyRKY0w__dSZYuPTBosSSGxZxCNvgK2ULBTDPGXSWn/exec';
     // ▲▲▲
     const grid = document.getElementById('term-grid');
     const modal = document.getElementById('signup-modal');
     if (!grid || !modal) return;
     const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
  
-    if (!SCRIPT_URL || SCRIPT_URL.indexOf('PASTE_') === 0) {
-      grid.innerHTML = '<p class="term-empty">Termini bodo kmalu na voljo.</p>';
-    } else {
-      fetch(SCRIPT_URL).then(r => r.json()).then(list => {
-        if (!Array.isArray(list) || !list.length) {
-          grid.innerHTML = '<p class="term-empty">Trenutno ni razpisanih terminov — piši mi za dogovor.</p>';
-          return;
-        }
-        grid.innerHTML = list.map(w => {
-          const mesta = (w.mesta === '' || w.mesta == null) ? '' : Number(w.mesta);
-          const full = mesta !== '' && mesta <= 0;
-          const dana = esc(w.naslov) + (w.datum ? ' — ' + esc(w.datum) : '');
-          const btn = full
-            ? '<span class="term-full">Zasedeno</span>'
-            : '<button class="btn btn-primary" data-delavnica="' + dana + '">Prijavi se</button>';
-          return '<article class="term-card">'
-            + '<div class="term-date">' + esc(w.datum) + (w.ura ? ' · ' + esc(w.ura) : '') + '</div>'
-            + '<h3>' + esc(w.naslov) + '</h3>'
-            + '<p class="term-meta">' + [w.vescina, w.kraj].filter(Boolean).map(esc).join(' · ') + '</p>'
-            + (w.opis ? '<p class="term-desc">' + esc(w.opis) + '</p>' : '')
-            + '<p class="term-foot"><span>' + esc(w.cena || '') + '</span>' + (mesta !== '' ? '<span>Prosta mesta: ' + mesta + '</span>' : '') + '</p>'
-            + btn + '</article>';
-        }).join('');
-      }).catch(() => { grid.innerHTML = '<p class="term-empty">Terminov trenutno ni mogoče naložiti.</p>'; });
+    // JSONP klic (brez CORS težav)
+    function jsonp(params, cb) {
+      const name = 'kptd_' + Math.random().toString(36).slice(2);
+      const s = document.createElement('script');
+      let done = false;
+      const finish = (data) => { if (done) return; done = true; try { delete window[name]; } catch (e) {} s.remove(); cb(data); };
+      window[name] = (data) => finish(data);
+      s.src = SCRIPT_URL + '?' + new URLSearchParams(Object.assign({ callback: name }, params)).toString();
+      s.onerror = () => finish(null);
+      setTimeout(() => finish(null), 12000);
+      document.body.appendChild(s);
     }
+ 
+    jsonp({ v: Date.now() }, function (list) {
+      if (!Array.isArray(list)) { grid.innerHTML = '<p class="term-empty">Terminov trenutno ni mogoče naložiti.</p>'; return; }
+      if (!list.length) { grid.innerHTML = '<p class="term-empty">Trenutno ni razpisanih terminov — piši mi za dogovor.</p>'; return; }
+      grid.innerHTML = list.map(w => {
+        const mesta = (w.mesta === '' || w.mesta == null) ? '' : Number(w.mesta);
+        const full = mesta !== '' && mesta <= 0;
+        const dana = esc(w.naslov) + (w.datum ? ' — ' + esc(w.datum) : '');
+        const btn = full
+          ? '<span class="term-full">Zasedeno</span>'
+          : '<button class="btn btn-primary" data-delavnica="' + dana + '">Prijavi se</button>';
+        return '<article class="term-card">'
+          + '<div class="term-date">' + esc(w.datum) + (w.ura ? ' · ' + esc(w.ura) : '') + '</div>'
+          + '<h3>' + esc(w.naslov) + '</h3>'
+          + '<p class="term-meta">' + [w.vescina, w.kraj].filter(Boolean).map(esc).join(' · ') + '</p>'
+          + (w.opis ? '<p class="term-desc">' + esc(w.opis) + '</p>' : '')
+          + '<p class="term-foot"><span>' + esc(w.cena || '') + '</span>' + (mesta !== '' ? '<span>Prosta mesta: ' + mesta + '</span>' : '') + '</p>'
+          + btn + '</article>';
+      }).join('');
+    });
  
     // odpri prijavno okno
     grid.addEventListener('click', e => {
@@ -794,19 +801,18 @@
       const lbl = btn.textContent;
       const ime = form.ime.value;
       btn.disabled = true; btn.textContent = 'Pošiljam…';
-      const p = new URLSearchParams({
-        action: 'signup',
-        delavnica: form.delavnica.value, ime: ime, email: form.email.value,
-        osebe: form.osebe.value, sporocilo: form.sporocilo.value
+      jsonp({
+        action: 'signup', delavnica: form.delavnica.value, ime: ime,
+        email: form.email.value, osebe: form.osebe.value, sporocilo: form.sporocilo.value
+      }, function (res) {
+        if (res && res.ok) {
+          form.innerHTML = '<div class="form-thanks"><h3>Prijava oddana!</h3>'
+            + '<p>Hvala, ' + esc(ime) + '. Oglasim se s potrditvijo. ❤</p></div>';
+        } else {
+          btn.disabled = false; btn.textContent = lbl;
+          note.textContent = 'Ups, poskusi znova ali piši na kakopatidelujes@gmail.com.';
+        }
       });
-      try {
-        await fetch(SCRIPT_URL + '?' + p.toString());
-        form.innerHTML = '<div class="form-thanks"><h3>Prijava oddana!</h3>'
-          + '<p>Hvala, ' + esc(ime) + '. Oglasim se s potrditvijo. ❤</p></div>';
-      } catch (err) {
-        btn.disabled = false; btn.textContent = lbl;
-        note.textContent = 'Ups, poskusi znova ali piši na kakopatidelujes@gmail.com.';
-      }
     });
   })();
  
