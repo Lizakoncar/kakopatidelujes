@@ -739,7 +739,7 @@
   // Prihajajoče delavnice: beri iz Google Preglednice (prek Apps Script) + prijave
   (function () {
     // ▼▼▼ PO NAMESTITVI SEM PRILEPI SPLETNI NASLOV APPS SCRIPTA (glej DELAVNICE-navodila.md) ▼▼▼
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdDjz6q_-mEZb1uyXE9r884PITI_YJRj-0IYHQZqjudRd9x-HUELXcI2GrzOYksANs/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzR3P8MlInWetoeuXFtUGDVhFFyRKY0w__dSZYuPTBosSSGxZxCNvgK2ULBTDPGXSWn/exec';
     // ▲▲▲
     const grid = document.getElementById('term-grid');
     const modal = document.getElementById('signup-modal');
@@ -773,16 +773,17 @@
         const full = mesta !== '' && mesta <= 0;
         const datum = fmtDate(w.datum);
         const dana = esc(w.naslov) + (datum ? ' — ' + esc(datum) : '');
-        const btn = full
-          ? '<span class="term-full">Zasedeno</span>'
-          : '<button class="btn btn-primary" data-delavnica="' + dana + '">Prijavi se</button>';
+        const spots = full
+          ? '<span class="term-full">Ni več prostih mest</span>'
+          : (mesta !== '' ? '<span>Prosta mesta: ' + Math.max(0, mesta) + ((w.skupno !== '' && w.skupno != null) ? '/' + w.skupno : '') + '</span>' : '');
         return '<article class="term-card">'
           + '<div class="term-date">' + esc(datum) + (w.ura ? ' · ' + esc(fmtTime(w.ura)) : '') + '</div>'
           + '<h3>' + esc(w.naslov) + '</h3>'
           + '<p class="term-meta">' + [w.vescina, w.kraj].filter(Boolean).map(esc).join(' · ') + '</p>'
           + (w.opis ? '<p class="term-desc">' + esc(w.opis) + '</p>' : '')
-          + '<p class="term-foot"><span>' + esc(fmtCena(w.cena)) + '</span>' + (mesta !== '' ? '<span>Prosta mesta: ' + mesta + '</span>' : '') + '</p>'
-          + btn + '</article>';
+          + '<p class="term-foot"><span>' + esc(fmtCena(w.cena)) + '</span>' + spots + '</p>'
+          + (full ? '' : '<button class="btn btn-primary" data-delavnica="' + dana + '">Prijavi se</button>')
+          + '</article>';
       }).join('');
     });
  
@@ -814,7 +815,7 @@
       }, function (res) {
         if (res && res.ok) {
           form.innerHTML = '<div class="form-thanks"><h3>Prijava oddana!</h3>'
-            + '<p>Hvala, ' + esc(ime) + '. Oglasim se s potrditvijo. ❤</p></div>';
+            + '<p>Hvala, ' + esc(ime) + '. Se vidimo. ❤</p></div>';
         } else {
           btn.disabled = false; btn.textContent = lbl;
           note.textContent = 'Ups, poskusi znova ali piši na kakopatidelujes@gmail.com.';
