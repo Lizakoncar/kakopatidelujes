@@ -42,18 +42,18 @@
   a { color: inherit; }
   h1, h2, h3 { font-family: var(--display); font-weight: 500; margin: 0; line-height: 1.04; letter-spacing: -0.015em; }
   .wrap { max-width: 1160px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
- 
+
   /* atmosfera */
   .glow { position: absolute; z-index: 0; border-radius: 50%; filter: blur(20px); pointer-events: none; }
   .glow-1 { width: 460px; height: 460px; background: var(--lav-deep); opacity: .5; top: -120px; right: -120px; }
   .glow-2 { width: 380px; height: 380px; background: var(--sun); opacity: .12; bottom: 10%; left: -120px; }
- 
+
   /* vrhnja vrstica */
   .top { display: flex; align-items: center; justify-content: space-between; padding: 26px 0 0; }
   .brandmark { font-family: var(--display); font-weight: 500; font-size: 1.1rem; color: var(--paper); text-decoration: none; }
   .back { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--paper); opacity: .78; text-decoration: none; }
   .back:hover { opacity: 1; }
- 
+
   /* glava */
   .head { padding: 70px 0 40px; max-width: 720px; }
   .kicker { font-family: var(--mono); font-weight: 700; font-size: 0.74rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sun); display: inline-flex; align-items: center; gap: 12px; margin-bottom: 20px; }
@@ -61,7 +61,7 @@
   .head h1 { font-size: clamp(2.6rem, 7vw, 4.6rem); color: var(--paper); }
   .head h1 em { font-style: italic; color: var(--lav); }
   .head p { margin: 22px 0 0; font-size: 1.15rem; color: rgba(247,244,239,.82); max-width: 46ch; }
- 
+
   /* kartice terminov */
   .term-grid { padding: 8px 0 90px; display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 22px; }
   .term-empty { grid-column: 1/-1; color: rgba(247,244,239,.7); font-family: var(--mono); font-size: .9rem; padding: 20px 0; }
@@ -75,13 +75,13 @@
   .term-full { font-family: var(--mono); font-size: .78rem; color: var(--plum-soft); }
   .term-offers { display: flex; flex-direction: column; gap: 4px; margin-top: 2px; }
   .term-offers span { font-family: var(--mono); font-size: .76rem; color: var(--plum); }
- 
+
   /* gumbi */
   .btn { display: inline-block; font-family: var(--mono); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; padding: 14px 24px; border-radius: 50px; border: 1.5px solid var(--plum); cursor: pointer; transition: background .2s, color .2s, transform .18s; }
   .btn-primary { background: var(--plum); color: var(--paper); }
   .btn-primary:hover { background: transparent; color: var(--plum); }
   .btn:hover { transform: translateY(-2px); }
- 
+
   /* prijavno okno */
   .modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(40,8,5,.62); }
   .modal[hidden] { display: none; }
@@ -98,7 +98,7 @@
   .form-note { font-family: var(--mono); font-size: 0.7rem; color: var(--plum-soft); }
   .form-thanks h3 { font-size: 1.6rem; color: var(--plum); margin-bottom: 10px; }
   .form-thanks p { color: var(--plum-soft); margin: 0; }
- 
+
   footer { padding: 20px 0 50px; font-family: var(--mono); font-size: 0.74rem; color: rgba(247,244,239,.6); }
   footer a { color: var(--sun); text-decoration: none; }
 </style>
@@ -106,28 +106,28 @@
 <body>
 <span class="glow glow-1"></span>
 <span class="glow glow-2"></span>
- 
+
 <div class="wrap">
   <div class="top">
     <a href="../" class="brandmark">kako pa ti deluješ?</a>
     <a href="../" class="back">← Nazaj na stran</a>
   </div>
- 
+
   <header class="head">
     <span class="kicker">Termini</span>
     <h1>Prihajajoče <em>delavnice</em></h1>
     <p>Izberi termin, ki ti ustreza, in se prijavi. Če ni razpisanega termina zate, mi piši —
     z veseljem se dogovoriva za svojega.</p>
   </header>
- 
+
   <div class="term-grid" id="term-grid"><p class="term-empty">Nalagam termine…</p></div>
- 
+
   <footer>
     Kako pa ti deluješ? · <a href="mailto:kakopatidelujes@gmail.com">kakopatidelujes@gmail.com</a> ·
     <a href="https://instagram.com/kakopatidelujes" target="_blank" rel="noopener">@kakopatidelujes</a>
   </footer>
 </div>
- 
+
 <!-- prijavno okno -->
 <div class="modal" id="signup-modal" hidden>
   <div class="modal-card">
@@ -161,7 +161,7 @@
     </form>
   </div>
 </div>
- 
+
 <script>
   (function () {
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdDjz6q_-mEZb1uyXE9r884PITI_YJRj-0IYHQZqjudRd9x-HUELXcI2GrzOYksANs/exec';
@@ -174,7 +174,7 @@
     const fmtDate = v => { if (v == null || v === '') return ''; const s = String(v); if (isISO(s)) { const d = new Date(s); if (!isNaN(d)) return d.getDate() + '. ' + (d.getMonth() + 1) + '. ' + d.getFullYear(); } return s; };
     const fmtTime = v => { if (v == null || v === '') return ''; const s = String(v); if (isISO(s)) { const d = new Date(s); if (!isNaN(d)) return pad(d.getHours()) + ':' + pad(d.getMinutes()); } return s; };
     const fmtCena = v => { if (v == null || v === '') return ''; const s = String(v).trim(); return /^\d+([.,]\d+)?$/.test(s) ? s + ' €' : s; };
- 
+
     function jsonp(params, cb) {
       const name = 'kptd_' + Math.random().toString(36).slice(2);
       const s = document.createElement('script');
@@ -186,7 +186,7 @@
       setTimeout(() => finish(null), 12000);
       document.body.appendChild(s);
     }
- 
+
     jsonp({ v: Date.now() }, function (list) {
       if (!Array.isArray(list)) { grid.innerHTML = '<p class="term-empty">Terminov trenutno ni mogoče naložiti.</p>'; return; }
       if (!list.length) { grid.innerHTML = '<p class="term-empty">Trenutno ni razpisanih terminov — piši mi za dogovor.</p>'; return; }
@@ -214,7 +214,7 @@
           + '</article>';
       }).join('');
     });
- 
+
     grid.addEventListener('click', e => {
       const b = e.target.closest('button[data-delavnica]'); if (!b) return;
       modal.querySelector('input[name=delavnica]').value = b.dataset.delavnica;
@@ -232,7 +232,7 @@
     const close = () => { modal.hidden = true; };
     modal.addEventListener('click', e => { if (e.target === modal || e.target.closest('.modal-x')) close(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
- 
+
     const form = document.getElementById('signup-form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -243,9 +243,8 @@
       const wrap = document.getElementById('offer-wrap');
       const sel = document.getElementById('s-ponudba');
       const ponudba = (wrap && !wrap.hidden && sel.value) ? sel.value : (form.dataset.single || '');
-      const delavnicaFull = form.delavnica.value + (ponudba ? ' · ' + ponudba : '');
       btn.disabled = true; btn.textContent = 'Pošiljam…';
-      jsonp({ action: 'signup', delavnica: delavnicaFull, ime: ime, email: form.email.value, osebe: form.osebe.value, sporocilo: form.sporocilo.value }, function (res) {
+      jsonp({ action: 'signup', delavnica: form.delavnica.value, ponudba: ponudba, ime: ime, email: form.email.value, osebe: form.osebe.value, sporocilo: form.sporocilo.value }, function (res) {
         if (res && res.ok) {
           form.innerHTML = '<div class="form-thanks"><h3>Prijava oddana!</h3><p>Hvala, ' + esc(ime) + '. Se vidimo. ❤</p></div>';
         } else {
