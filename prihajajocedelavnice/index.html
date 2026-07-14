@@ -73,6 +73,8 @@
   .term-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: var(--mono); font-size: .76rem; color: var(--plum); margin-top: 4px; }
   .term-card .btn { margin-top: 10px; align-self: flex-start; }
   .term-full { font-family: var(--mono); font-size: .78rem; color: var(--plum-soft); }
+  .term-offers { display: flex; flex-direction: column; gap: 4px; margin-top: 2px; }
+  .term-offers span { font-family: var(--mono); font-size: .76rem; color: var(--plum); }
  
   /* gumbi */
   .btn { display: inline-block; font-family: var(--mono); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; padding: 14px 24px; border-radius: 50px; border: 1.5px solid var(--plum); cursor: pointer; transition: background .2s, color .2s, transform .18s; }
@@ -89,8 +91,8 @@
   .modal-x { position: absolute; top: 12px; right: 16px; background: none; border: 0; font-size: 1.7rem; line-height: 1; color: var(--plum-soft); cursor: pointer; }
   form { display: grid; gap: 16px; }
   label { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--plum); display: block; margin-bottom: 7px; }
-  input, textarea { width: 100%; font-family: var(--body); font-size: 1rem; padding: 12px 16px; border: 1.5px solid rgba(122,22,14,.25); border-radius: 12px; background: #fff; color: var(--plum); transition: border-color .18s; }
-  input:focus, textarea:focus { outline: none; border-color: var(--lav-deep); }
+  input, textarea, select { width: 100%; font-family: var(--body); font-size: 1rem; padding: 12px 16px; border: 1.5px solid rgba(122,22,14,.25); border-radius: 12px; background: #fff; color: var(--plum); transition: border-color .18s; }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--lav-deep); }
   textarea { resize: vertical; min-height: 96px; }
   .modal .btn { justify-self: start; margin-top: 2px; }
   .form-note { font-family: var(--mono); font-size: 0.7rem; color: var(--plum-soft); }
@@ -134,6 +136,10 @@
     <p class="modal-sub" id="signup-which"></p>
     <form id="signup-form">
       <input type="hidden" name="delavnica" />
+      <div id="offer-wrap" hidden>
+        <label for="s-ponudba">Izberi ponudbo</label>
+        <select id="s-ponudba" name="ponudba"></select>
+      </div>
       <div>
         <label for="s-ime">Ime</label>
         <input id="s-ime" name="ime" required />
@@ -189,16 +195,22 @@
         const full = mesta !== '' && mesta <= 0;
         const datum = fmtDate(w.datum);
         const dana = esc(w.naslov) + (datum ? ' — ' + esc(datum) : '');
+        const offers = String(w.cena == null ? '' : w.cena).split(/[;\n\r]+/).map(x => x.trim()).filter(Boolean);
+        const priceLine = offers.length === 1 ? esc(fmtCena(offers[0])) : '';
+        const offersBlock = offers.length > 1
+          ? '<div class="term-offers">' + offers.map(o => '<span>' + esc(o) + '</span>').join('') + '</div>'
+          : '';
         const spots = full
           ? '<span class="term-full">Ni več prostih mest</span>'
           : (mesta !== '' ? '<span>Prosta mesta: ' + Math.max(0, mesta) + ((w.skupno !== '' && w.skupno != null) ? '/' + w.skupno : '') + '</span>' : '');
         return '<article class="term-card">'
           + '<div class="term-date">' + esc(datum) + (w.ura ? ' · ' + esc(fmtTime(w.ura)) : '') + '</div>'
           + '<h3>' + esc(w.naslov) + '</h3>'
-          + '<p class="term-meta">' + [w.vescina, w.kraj].filter(Boolean).map(esc).join(' · ') + '</p>'
+          + '<p class="term-meta">' + [w.vescina, w.kraj].filter(Boolean).map(esc).join('<br>') + '</p>'
           + (w.opis ? '<p class="term-desc">' + esc(w.opis) + '</p>' : '')
-          + '<p class="term-foot"><span>' + esc(fmtCena(w.cena)) + '</span>' + spots + '</p>'
-          + (full ? '' : '<button class="btn btn-primary" data-delavnica="' + dana + '">Prijavi se</button>')
+          + offersBlock
+          + '<p class="term-foot"><span>' + priceLine + '</span>' + spots + '</p>'
+          + (full ? '' : '<button class="btn btn-primary" data-delavnica="' + dana + '" data-offers="' + esc(JSON.stringify(offers)) + '">Prijavi se</button>')
           + '</article>';
       }).join('');
     });
@@ -208,6 +220,13 @@
       modal.querySelector('input[name=delavnica]').value = b.dataset.delavnica;
       document.getElementById('signup-which').textContent = b.dataset.delavnica;
       document.getElementById('signup-note').textContent = '';
+      let offers = [];
+      try { offers = JSON.parse(b.dataset.offers || '[]'); } catch (e2) {}
+      const wrap = document.getElementById('offer-wrap');
+      const sel = document.getElementById('s-ponudba');
+      form.dataset.single = offers.length === 1 ? offers[0] : '';
+      if (offers.length > 1) { sel.innerHTML = offers.map(o => '<option>' + esc(o) + '</option>').join(''); wrap.hidden = false; }
+      else { sel.innerHTML = ''; wrap.hidden = true; }
       modal.hidden = false;
     });
     const close = () => { modal.hidden = true; };
@@ -221,8 +240,12 @@
       const btn = form.querySelector('button[type=submit]');
       const lbl = btn.textContent;
       const ime = form.ime.value;
+      const wrap = document.getElementById('offer-wrap');
+      const sel = document.getElementById('s-ponudba');
+      const ponudba = (wrap && !wrap.hidden && sel.value) ? sel.value : (form.dataset.single || '');
+      const delavnicaFull = form.delavnica.value + (ponudba ? ' · ' + ponudba : '');
       btn.disabled = true; btn.textContent = 'Pošiljam…';
-      jsonp({ action: 'signup', delavnica: form.delavnica.value, ime: ime, email: form.email.value, osebe: form.osebe.value, sporocilo: form.sporocilo.value }, function (res) {
+      jsonp({ action: 'signup', delavnica: delavnicaFull, ime: ime, email: form.email.value, osebe: form.osebe.value, sporocilo: form.sporocilo.value }, function (res) {
         if (res && res.ok) {
           form.innerHTML = '<div class="form-thanks"><h3>Prijava oddana!</h3><p>Hvala, ' + esc(ime) + '. Se vidimo. ❤</p></div>';
         } else {
