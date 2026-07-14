@@ -519,7 +519,7 @@
     <div class="term-grid" id="term-grid"><p class="term-empty">Nalagam termine…</p></div>
   </div>
 </section>
- 
+
 <!-- ============ ABOUT ============ -->
 <section class="about" id="liza">
   <span class="glow glow-1"></span>
@@ -644,7 +644,7 @@
     </form>
   </div>
 </div>
- 
+
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="wrap">
@@ -757,7 +757,7 @@
     const fmtDate = v => { if (v == null || v === '') return ''; const s = String(v); if (isISO(s)) { const d = new Date(s); if (!isNaN(d)) return d.getDate() + '. ' + (d.getMonth() + 1) + '. ' + d.getFullYear(); } return s; };
     const fmtTime = v => { if (v == null || v === '') return ''; const s = String(v); if (isISO(s)) { const d = new Date(s); if (!isNaN(d)) return pad(d.getHours()) + ':' + pad(d.getMinutes()); } return s; };
     const fmtCena = v => { if (v == null || v === '') return ''; const s = String(v).trim(); return /^\d+([.,]\d+)?$/.test(s) ? s + ' €' : s; };
- 
+
     // JSONP klic (brez CORS težav)
     function jsonp(params, cb) {
       const name = 'kptd_' + Math.random().toString(36).slice(2);
@@ -770,7 +770,7 @@
       setTimeout(() => finish(null), 12000);
       document.body.appendChild(s);
     }
- 
+
     jsonp({ v: Date.now() }, function (list) {
       if (!Array.isArray(list)) { grid.innerHTML = '<p class="term-empty">Terminov trenutno ni mogoče naložiti.</p>'; return; }
       if (!list.length) { grid.innerHTML = '<p class="term-empty">Trenutno ni razpisanih terminov — piši mi za dogovor.</p>'; return; }
@@ -798,7 +798,7 @@
           + '</article>';
       }).join('');
     });
- 
+
     // odpri prijavno okno
     grid.addEventListener('click', e => {
       const b = e.target.closest('button[data-delavnica]');
@@ -818,7 +818,7 @@
     const close = () => { modal.hidden = true; };
     modal.addEventListener('click', e => { if (e.target === modal || e.target.closest('.modal-x')) close(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
- 
+
     // oddaja prijave (v Google Preglednico prek Apps Script)
     const form = document.getElementById('signup-form');
     form.addEventListener('submit', async e => {
@@ -830,10 +830,9 @@
       const wrap = document.getElementById('offer-wrap');
       const sel = document.getElementById('s-ponudba');
       const ponudba = (wrap && !wrap.hidden && sel.value) ? sel.value : (form.dataset.single || '');
-      const delavnicaFull = form.delavnica.value + (ponudba ? ' · ' + ponudba : '');
       btn.disabled = true; btn.textContent = 'Pošiljam…';
       jsonp({
-        action: 'signup', delavnica: delavnicaFull, ime: ime,
+        action: 'signup', delavnica: form.delavnica.value, ponudba: ponudba, ime: ime,
         email: form.email.value, osebe: form.osebe.value, sporocilo: form.sporocilo.value
       }, function (res) {
         if (res && res.ok) {
@@ -846,7 +845,7 @@
       });
     });
   })();
- 
+
   const els = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
