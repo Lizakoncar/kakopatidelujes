@@ -15,7 +15,7 @@
 <link rel="apple-touch-icon" href="../images/apple-touch-icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Mulish:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Mulish:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 <style>
   :root {
     --paper:     #f7f4ef;
@@ -24,7 +24,7 @@
     --sun:       #f5c84b;
     --plum:      #7A160E;
     --plum-soft: #9c5a4f;
-    --display: "Fraunces", Georgia, serif;
+    --display: "DynaPuff", Georgia, serif;  /* naslovi in poudarjene izjave */
     --mono: "Space Mono", ui-monospace, monospace;
     --body: "Mulish", system-ui, sans-serif;
   }
@@ -40,7 +40,7 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
   a { color: inherit; }
-  h1, h2, h3 { font-family: var(--display); font-weight: 500; margin: 0; line-height: 1.04; letter-spacing: -0.015em; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 500; margin: 0; line-height: 1.18; letter-spacing: 0; }
   .wrap { max-width: 1160px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
 
   /* atmosfera */
@@ -50,7 +50,7 @@
 
   /* vrhnja vrstica */
   .top { display: flex; align-items: center; justify-content: space-between; padding: 26px 0 0; }
-  .brandmark { font-family: var(--display); font-weight: 500; font-size: 1.1rem; color: var(--paper); text-decoration: none; }
+  .brandmark { font-family: var(--display); font-weight: 500; font-size: 0.95rem; color: var(--paper); text-decoration: none; }
   .back { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--paper); opacity: .78; text-decoration: none; }
   .back:hover { opacity: 1; }
 
@@ -58,8 +58,8 @@
   .head { padding: 70px 0 40px; max-width: 720px; }
   .kicker { font-family: var(--mono); font-weight: 700; font-size: 0.74rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sun); display: inline-flex; align-items: center; gap: 12px; margin-bottom: 20px; }
   .kicker::before { content: ""; width: 28px; height: 1.5px; background: currentColor; opacity: .7; }
-  .head h1 { font-size: clamp(2.6rem, 7vw, 4.6rem); color: var(--paper); }
-  .head h1 em { font-style: italic; color: var(--lav); }
+  .head h1 { font-size: clamp(2.2rem, 5.8vw, 3.9rem); color: var(--paper); }
+  .head h1 em { font-style: normal; font-weight: 700; color: var(--lav); }
   .head p { margin: 22px 0 0; font-size: 1.15rem; color: rgba(247,244,239,.82); max-width: 46ch; }
 
   /* kartice terminov */
@@ -260,5 +260,8 @@
     });
   })();
 </script>
+<!-- Cloudflare Web Analytics (brezplačno, brez piškotkov). Žeton dobiš na dash.cloudflare.com → Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "TVOJ_CF_ZETON"}'></script>
+<!-- End Cloudflare Web Analytics -->
 </body>
 </html>
