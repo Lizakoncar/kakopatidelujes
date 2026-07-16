@@ -10,7 +10,7 @@
 <meta property="og:type" content="website" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Mulish:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Mulish:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 <style>
   :root {
     --paper:     #f7f4ef;
@@ -22,7 +22,7 @@
     --sun:       #f5c84b;
     --plum:      #7A160E;
     --plum-soft: #9c5a4f;
-    --display: "Fraunces", Georgia, serif;
+    --display: "DynaPuff", Georgia, serif;  /* naslovi in poudarjene izjave */
     --mono: "Space Mono", ui-monospace, monospace;
     --body: "Mulish", system-ui, sans-serif;
     --maxw: 1200px;
@@ -46,7 +46,7 @@
   }
   img { display: block; max-width: 100%; }
   a { color: inherit; }
-  h1, h2, h3 { font-family: var(--display); font-weight: 500; line-height: 1.04; margin: 0; letter-spacing: -0.015em; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 500; line-height: 1.18; margin: 0; letter-spacing: 0; }
   .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 36px; }
   .marker {
     font-family: var(--mono); font-size: 0.72rem; font-weight: 700;
@@ -84,7 +84,7 @@
     position: absolute; top: 0; left: 0; right: 0; z-index: 30;
     display: flex; align-items: center; justify-content: space-between; padding: 22px 36px;
   }
-  .brandmark { font-family: var(--display); font-weight: 500; font-size: 1.15rem; color: var(--plum); text-decoration: none; }
+  .brandmark { font-family: var(--display); font-weight: 500; font-size: 1rem; color: var(--plum); text-decoration: none; }
   nav.links { display: flex; gap: 26px; }
   nav.links a {
     font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
@@ -100,8 +100,8 @@
   .hero .glow-4 { width: 300px; height: 300px; background: var(--sun); opacity: .42; bottom: 4%; right: 30%; }
   .hero-text { position: relative; z-index: 5; align-self: center; padding: 90px 10px 40px clamp(24px, 5vw, 76px); }
   .hero-kicker { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lav-deep); margin-bottom: 18px; }
-  .hero-title { font-size: clamp(2.7rem, 6.2vw, 5rem); line-height: 0.96; color: var(--plum); }
-  .hero-title em { font-style: italic; color: var(--lav-deep); }
+  .hero-title { font-size: clamp(2.3rem, 5.2vw, 4.2rem); line-height: 1.06; color: var(--plum); }
+  .hero-title em { font-style: normal; font-weight: 700; color: var(--lav-deep); }
   .hero-lead { margin: 22px 0 28px; font-size: 1.1rem; color: var(--plum-soft); max-width: 28ch; }
   .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
   .hero-cluster { position: relative; z-index: 4; }
@@ -119,7 +119,7 @@
     }
     .hero-text { flex: 0 0 auto; padding: 0; }
     .hero-kicker { margin-bottom: 10px; }
-    .hero-title { font-size: clamp(2.2rem, 8.5vw, 3rem); }
+    .hero-title { font-size: clamp(1.9rem, 7.2vw, 2.6rem); }
     .hero-lead { margin: 12px 0 16px; font-size: 1rem; max-width: none; }
     .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
     .hero-actions .btn { padding: 13px 18px; font-size: 0.72rem; }
@@ -156,19 +156,19 @@
   .intro .wrap { position: relative; z-index: 1; display: flex; gap: 56px; align-items: center; flex-wrap: wrap; }
   .intro-text { flex: 1 1 440px; }
   .intro-media { flex: 1 1 320px; position: relative; }
-  .intro .lead { font-family: var(--display); font-weight: 400; font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.14; color: var(--plum); }
-  .intro .lead em { font-style: italic; color: var(--lav-deep); }
+  .intro .lead { font-family: var(--display); font-weight: 400; font-size: clamp(1.6rem, 3.2vw, 2.4rem); line-height: 1.22; color: var(--plum); }
+  .intro .lead em { font-style: normal; font-weight: 700; color: var(--lav-deep); }
   .intro .body { margin-top: 24px; font-size: 1.05rem; color: var(--plum-soft); max-width: 46ch; }
   .intro .body strong { color: var(--plum); font-weight: 700; }
   .intro .body em { font-style: italic; color: var(--lav-deep); }
-  .signoff { font-family: var(--display); font-style: italic; font-weight: 500; color: var(--lav-deep); margin-top: 22px; font-size: 1.55rem; }
+  .signoff { font-family: var(--display); font-weight: 700; color: var(--lav-deep); margin-top: 22px; font-size: 1.35rem; }
   .intro-media .orb .shape img { aspect-ratio: 4/5; }
   .intro-media .scrap { position: absolute; width: 42%; aspect-ratio: 1/1; right: -6%; bottom: -8%; transform: rotate(6deg); z-index: 3; }
   .intro-media .cap { position: absolute; left: -4%; top: -8%; transform: rotate(-4deg); z-index: 3; }
   /* ---------- marquee ---------- */
   .marquee-wrap { position: relative; overflow: hidden; padding: 14px 0; background: var(--sage); margin-top: -10px; }
   .marquee { display: flex; width: max-content; animation: marq 48s linear infinite; }
-  .marquee-track { font-family: var(--display); font-style: italic; font-weight: 400; font-size: clamp(1.5rem, 3.6vw, 2.4rem); color: var(--plum); white-space: nowrap; }
+  .marquee-track { font-family: var(--display); font-weight: 400; font-size: clamp(1.2rem, 2.8vw, 1.9rem); color: var(--plum); white-space: nowrap; }
   .marquee-track .dot { color: var(--lav-deep); margin: 0 .5em; }
   @keyframes marq { to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .marquee { animation: none; } }
@@ -266,7 +266,7 @@
   .about h2 { font-size: clamp(2rem, 4.4vw, 2.9rem); color: var(--paper); margin-bottom: 22px; }
   .about p { color: rgba(247,244,239,.82); margin: 0 0 16px; }
   .about em { font-style: italic; color: var(--sun); }
-  .about .pull { font-family: var(--display); font-style: italic; font-size: 1.55rem; color: var(--sun); margin: 0 0 8px; }
+  .about .pull { font-family: var(--display); font-weight: 700; font-size: 1.35rem; line-height: 1.3; color: var(--sun); margin: 0 0 8px; }
   .about .name { font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,239,.7); margin-top: 14px; display: inline-block; }
   /* ---------- contact ---------- */
   .contact { position: relative; padding: 100px 0; overflow-x: clip; }
@@ -320,7 +320,7 @@
   .modal-x { position: absolute; top: 12px; right: 16px; background: none; border: 0; font-size: 1.7rem; line-height: 1; color: var(--plum-soft); cursor: pointer; }
   /* ---------- footer ---------- */
   footer { background: var(--plum); color: var(--paper); padding: 78px 0 44px; text-align: center; }
-  footer .big { font-family: var(--display); font-weight: 400; font-style: italic; font-size: clamp(2.2rem, 7vw, 4rem); color: var(--paper); line-height: 1; }
+  footer .big { font-family: var(--display); font-weight: 500; font-size: clamp(1.9rem, 5.6vw, 3.3rem); color: var(--paper); line-height: 1.15; }
   footer .tag { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,239,.55); display: block; margin-top: 18px; }
   footer .meta { margin-top: 24px; font-family: var(--mono); font-size: 0.72rem; color: rgba(247,244,239,.6); line-height: 1.9; }
   footer .meta a { color: var(--sun); text-decoration: none; }
@@ -529,7 +529,7 @@
     </div>
     <div class="about-text reveal">
       <p class="marker">Zgodba</p>
-      <h2>Nikoli nisem bila človek, ki bi se brez težav znašel v sistemih.</h2>
+      <h2>Nikoli nisem bila človek, ki bi se brez težav znašla v sistemih.</h2>
       <p>Že kot otrok sem svet doživljala nekoliko drugače. Zaradi težke oblike disleksije mi šolski
       sistem ni bil pisan na kožo, razen predmeti v rokah, materialih, glasbi, barvah in idejah.
       Tam sem bila doma.</p>
@@ -859,5 +859,8 @@
     els.forEach(el => io.observe(el));
   } else { els.forEach(el => el.classList.add('in')); }
 </script>
+<!-- Cloudflare Web Analytics (brezplačno, brez piškotkov). Žeton dobiš na dash.cloudflare.com → Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "TVOJ_CF_ZETON"}'></script>
+<!-- End Cloudflare Web Analytics -->
 </body>
 </html>
